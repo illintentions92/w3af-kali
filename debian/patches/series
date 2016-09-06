@@ -4,4 +4,8 @@ disable-auto-update.patch
 disable-pip-warning.patch
 jinja2-old.patch
 
-
+let-upstream-know-this-is-a-Debian-package.patch
+this-script-won-t-ever-be-running-by-hand.patch
+disable-auto-update.patch
+disable-dependency_check.patch
+mitmproxy_ProxyServerError_ServerException.patch

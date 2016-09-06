@@ -1,3 +1,40 @@
+w3af (1.6.54+git20160429-3) unstable; urgency=medium
+
+  * Add gbp.conf file
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Mon, 22 Aug 2016 17:18:23 +0200
+
+w3af (1.6.54+git20160429-2) UNRELEASED; urgency=medium
+
+  * Move to pkg-security
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Sat, 28 May 2016 10:15:46 +0200
+
+w3af (1.6.54+git20160429-1) unstable; urgency=medium
+
+  [ Luciano Bello ]
+  * New upstream release Closes: #711866. Master's head on 2016-04-29.
+  * New upstream website:
+    - Watch file updated.
+    - Homepage in debian/control.
+    - python-pypdf dependency was removed. Closes: #763975.
+  * Manpage draft added.
+  * New Standards-Version: 3.9.8
+  * debian/copyright: XDot url updated.
+  * Migrating to dh_python2. Closes: #703686.
+  * X-Python-Version: >= 2.7 Closes: #703042
+  * SQLmap embedded copy removed.
+  * Plugins' tests removed via -X /plugins/tests/.
+  * Removing GUI files (w3af/core/ui/gui) from w3af-console and adding
+    it to w3af binary package.
+  * Copyright file purged.
+
+  [ Gianfranco Costamagna ]
+  * Fix insecure VCS fields
+  * Drop menu file, per CTTE decision
+
+ -- Luciano Bello <luciano@debian.org>  Tue, 26 Apr 2016 13:36:08 +0200
+
 w3af (1.6.54-0kali2) kali; urgency=medium
 
   * Fix debian/control to amend X-Python-Version: >= 2.7 as required by
@@ -159,6 +196,17 @@ w3af (1.1svn5547-1kali0) kali; urgency=low
   * Kali import.
 
  -- Mati Aharoni <muts@kali.org>  Sat, 23 Mar 2013 17:31:54 -0400
+
+w3af (1.1svn5547-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload from debconf15
+  * Replace python-support by dh-python
+  * AddRediff existing dependency patch into new
+    remove_pybloomfilter_import.patch and apply it (closes: #684722)
+  * Add python-lxml and python-scapy to Depends as the package doesn't
+    work without them
+
+ -- Paul Gevers <elbrus@debian.org>  Tue, 18 Aug 2015 17:20:42 +0200
 
 w3af (1.1svn5547-1) unstable; urgency=low
 

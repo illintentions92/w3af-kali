@@ -1,8 +1,18 @@
-Index: w3af-kali/w3af_console
-===================================================================
---- w3af-kali.orig/w3af_console	2015-03-02 14:14:58.000000000 -0300
-+++ w3af-kali/w3af_console	2015-03-02 14:14:58.000000000 -0300
-@@ -34,14 +34,6 @@
+From 16b3dba93a5cd8929b69164104a8f00ed3c39b15 Mon Sep 17 00:00:00 2001
+From: Luciano Bello <luciano@debian.org>
+Date: Tue, 26 Apr 2016 13:46:53 +0200
+Subject: disable-auto-update
+
+---
+ w3af_console | 18 +++---------------
+ w3af_gui     | 17 ++---------------
+ 2 files changed, 5 insertions(+), 30 deletions(-)
+
+diff --git a/w3af_console b/w3af_console
+index cdb1bfc..0ea0f70 100755
+--- a/w3af_console
++++ b/w3af_console
+@@ -34,14 +34,6 @@ Options:
      -s <script_file> or --script=<script_file>
          Run <script_file> script
  
@@ -17,18 +27,18 @@ Index: w3af-kali/w3af_console
      -p <profile> or --profile=<profile>
          Run with the selected <profile>
      
-@@ -110,8 +102,8 @@
+@@ -110,8 +102,8 @@ def _generate_run_commands(script_file, profile, force_profile):
  
  def main():
      try:
 -        long_options = ['script=', 'help', 'version', 'no-update',
 -                        'force-update', 'profile=', 'commit=', 'profile-run']
 +        long_options = ['script=', 'help', 'version',
-+                        'profile=', 'profile-run']
++                        'profile=', 'commit=', 'profile-run']
          opts, _ = getopt.getopt(sys.argv[1:], "ehvs:nfp:P:", long_options)
      except getopt.GetoptError:
          # Print help information and exit
-@@ -121,7 +113,7 @@
+@@ -121,7 +113,7 @@ def main():
      script_file = None
      force_profile = None
      profile = None
@@ -37,7 +47,7 @@ Index: w3af-kali/w3af_console
      
      for o, a in opts:
          if o == "-e":
-@@ -144,10 +136,6 @@
+@@ -144,10 +136,6 @@ def main():
          if o in ('-v', '--version'):
              print(get_w3af_version())
              return 0
@@ -48,11 +58,11 @@ Index: w3af-kali/w3af_console
      
      commands_to_run = _generate_run_commands(script_file, profile, force_profile)
      console = ConsoleUI(commands=commands_to_run, do_upd=do_update)
-Index: w3af-kali/w3af_gui
-===================================================================
---- w3af-kali.orig/w3af_gui	2015-03-02 14:14:58.000000000 -0300
-+++ w3af-kali/w3af_gui	2015-03-02 14:14:58.000000000 -0300
-@@ -27,14 +27,6 @@
+diff --git a/w3af_gui b/w3af_gui
+index c480ae0..6c98173 100755
+--- a/w3af_gui
++++ b/w3af_gui
+@@ -27,14 +27,6 @@ Options:
      -h or --help
          Display this help message.
  
@@ -67,7 +77,7 @@ Index: w3af-kali/w3af_gui
      -p <profile> or --profile=<profile>
          Run with the selected <profile>
  
-@@ -61,7 +53,7 @@
+@@ -61,7 +53,7 @@ def usage():
  
  def main():
      try:
@@ -76,7 +86,7 @@ Index: w3af-kali/w3af_gui
          opts, _ = getopt.getopt(sys.argv[1:], "ehnfp:", long_options)
      except getopt.GetoptError:
          # print help information and exit:
-@@ -69,7 +61,7 @@
+@@ -69,7 +61,7 @@ def main():
          return -3
      
      profile = None
@@ -85,7 +95,7 @@ Index: w3af-kali/w3af_gui
      
      for o, a in opts:
          if o in ("-e"):
-@@ -83,11 +75,6 @@
+@@ -83,11 +75,6 @@ def main():
          if o in ('-h', '--help'):
              usage()
              return 0
@@ -97,4 +107,3 @@ Index: w3af-kali/w3af_gui
  
      # go with GTK, but first check about DISPLAY environment variable
      if sys.platform != "win32":
-
