@@ -123,11 +123,8 @@ def _setRequestParams():
             else:
                 kb.processUserMarks = not test or test[0] not in ("n", "N")
 
-                if kb.processUserMarks and "=%s" % CUSTOM_INJECTION_MARK_CHAR in conf.data:
-                    warnMsg = "it seems that you've provided empty parameter value(s) "
-                    warnMsg += "for testing. Please, always use only valid parameter values "
-                    warnMsg += "so sqlmap could be able to run properly"
-                    logger.warn(warnMsg)
+                if kb.processUserMarks:
+                    kb.testOnlyCustom = True
 
         if not (kb.processUserMarks and CUSTOM_INJECTION_MARK_CHAR in conf.data):
             if re.search(JSON_RECOGNITION_REGEX, conf.data):
@@ -211,7 +208,7 @@ def _setRequestParams():
 
     kb.processUserMarks = True if (kb.postHint and CUSTOM_INJECTION_MARK_CHAR in conf.data) else kb.processUserMarks
 
-    if re.search(URI_INJECTABLE_REGEX, conf.url, re.I) and not any(place in conf.parameters for place in (PLACE.GET, PLACE.POST)) and not kb.postHint and not CUSTOM_INJECTION_MARK_CHAR in (conf.data or ""):
+    if re.search(URI_INJECTABLE_REGEX, conf.url, re.I) and not any(place in conf.parameters for place in (PLACE.GET, PLACE.POST)) and not kb.postHint and not CUSTOM_INJECTION_MARK_CHAR in (conf.data or "") and conf.url.startswith("http"):
         warnMsg = "you've provided target URL without any GET "
         warnMsg += "parameters (e.g. www.site.com/article.php?id=1) "
         warnMsg += "and without providing any POST parameters "
@@ -241,11 +238,14 @@ def _setRequestParams():
                 else:
                     kb.processUserMarks = not test or test[0] not in ("n", "N")
 
-                    if kb.processUserMarks and "=%s" % CUSTOM_INJECTION_MARK_CHAR in _:
-                        warnMsg = "it seems that you've provided empty parameter value(s) "
-                        warnMsg += "for testing. Please, always use only valid parameter values "
-                        warnMsg += "so sqlmap could be able to run properly"
-                        logger.warn(warnMsg)
+                    if kb.processUserMarks:
+                        kb.testOnlyCustom = True
+
+                        if "=%s" % CUSTOM_INJECTION_MARK_CHAR in _:
+                            warnMsg = "it seems that you've provided empty parameter value(s) "
+                            warnMsg += "for testing. Please, always use only valid parameter values "
+                            warnMsg += "so sqlmap could be able to run properly"
+                            logger.warn(warnMsg)
 
             if not kb.processUserMarks:
                 if place == PLACE.URI:
@@ -604,7 +604,7 @@ def _createTargetDirs():
 
             warnMsg = "unable to create regular output directory "
             warnMsg += "'%s' (%s). " % (paths.SQLMAP_OUTPUT_PATH, getUnicode(ex))
-            warnMsg += "Using temporary directory '%s' instead" % tempDir
+            warnMsg += "Using temporary directory '%s' instead" % getUnicode(tempDir)
             logger.warn(warnMsg)
 
             paths.SQLMAP_OUTPUT_PATH = tempDir
@@ -626,7 +626,7 @@ def _createTargetDirs():
 
             warnMsg = "unable to create output directory "
             warnMsg += "'%s' (%s). " % (conf.outputPath, getUnicode(ex))
-            warnMsg += "Using temporary directory '%s' instead" % tempDir
+            warnMsg += "Using temporary directory '%s' instead" % getUnicode(tempDir)
             logger.warn(warnMsg)
 
             conf.outputPath = tempDir

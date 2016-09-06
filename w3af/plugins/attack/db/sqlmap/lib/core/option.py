@@ -53,7 +53,6 @@ from lib.core.common import readInput
 from lib.core.common import resetCookieJar
 from lib.core.common import runningAsAdmin
 from lib.core.common import safeExpandUser
-from lib.core.common import sanitizeStr
 from lib.core.common import setOptimize
 from lib.core.common import setPaths
 from lib.core.common import singleTimeWarnMessage
@@ -289,7 +288,7 @@ def _feedTargetsDict(reqFile, addedTargetUrls):
                 line = line.strip('\r')
                 match = re.search(r"\A(%s) (.+) HTTP/[\d.]+\Z" % "|".join(getPublicTypeMembers(HTTPMETHOD, True)), line) if not method else None
 
-                if len(line) == 0 and method and method != HTTPMETHOD.GET and data is None:
+                if len(line.strip()) == 0 and method and method != HTTPMETHOD.GET and data is None:
                     data = ""
                     params = True
 
@@ -766,8 +765,14 @@ def _setMetasploit():
 
     if conf.msfPath:
         for path in (conf.msfPath, os.path.join(conf.msfPath, "bin")):
-            if all(os.path.exists(normalizePath(os.path.join(path, _))) for _ in ("", "msfcli", "msfconsole", "msfencode", "msfpayload")):
+            if all(os.path.exists(normalizePath(os.path.join(path, _))) for _ in ("", "msfcli", "msfconsole")):
                 msfEnvPathExists = True
+                if all(os.path.exists(normalizePath(os.path.join(path, _))) for _ in ("msfvenom",)):
+                    kb.msfVenom = True
+                elif all(os.path.exists(normalizePath(os.path.join(path, _))) for _ in ("msfencode", "msfpayload")):
+                    kb.msfVenom = False
+                else:
+                    msfEnvPathExists = False
                 conf.msfPath = path
                 break
 
@@ -798,15 +803,23 @@ def _setMetasploit():
         for envPath in envPaths:
             envPath = envPath.replace(";", "")
 
-            if all(os.path.exists(normalizePath(os.path.join(envPath, _))) for _ in ("", "msfcli", "msfconsole", "msfencode", "msfpayload")):
-                infoMsg = "Metasploit Framework has been found "
-                infoMsg += "installed in the '%s' path" % envPath
-                logger.info(infoMsg)
-
+            if all(os.path.exists(normalizePath(os.path.join(envPath, _))) for _ in ("", "msfcli", "msfconsole")):
                 msfEnvPathExists = True
-                conf.msfPath = envPath
+                if all(os.path.exists(normalizePath(os.path.join(envPath, _))) for _ in ("msfvenom",)):
+                    kb.msfVenom = True
+                elif all(os.path.exists(normalizePath(os.path.join(envPath, _))) for _ in ("msfencode", "msfpayload")):
+                    kb.msfVenom = False
+                else:
+                    msfEnvPathExists = False
 
-                break
+                if msfEnvPathExists:
+                    infoMsg = "Metasploit Framework has been found "
+                    infoMsg += "installed in the '%s' path" % envPath
+                    logger.info(infoMsg)
+
+                    conf.msfPath = envPath
+
+                    break
 
     if not msfEnvPathExists:
         errMsg = "unable to locate Metasploit Framework installation. "
@@ -1325,6 +1338,9 @@ def _setHTTPExtraHeaders():
         conf.headers = conf.headers.split("\n") if "\n" in conf.headers else conf.headers.split("\\n")
 
         for headerValue in conf.headers:
+            if not headerValue.strip():
+                continue
+
             if headerValue.count(':') >= 1:
                 header, value = (_.lstrip() for _ in headerValue.split(":", 1))
 
@@ -1771,6 +1787,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.followSitemapRecursion = None
     kb.forcedDbms = None
     kb.forcePartialUnion = False
+    kb.futileUnion = None
     kb.headersFp = {}
     kb.heuristicDbms = None
     kb.heuristicMode = False
@@ -1794,12 +1811,14 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.matchRatio = None
     kb.maxConnectionsFlag = False
     kb.mergeCookies = None
+    kb.msfVenom = False
     kb.multiThreadMode = False
     kb.negativeLogic = False
     kb.nullConnection = None
     kb.orderByColumns = None
     kb.originalCode = None
     kb.originalPage = None
+    kb.originalPageTime = None
     kb.originalTimeDelay = None
     kb.originalUrls = dict()
 
@@ -1836,6 +1855,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.safeReq = AttribDict()
     kb.singleLogFlags = set()
     kb.reduceTests = None
+    kb.tlsSNI = None
     kb.stickyDBMS = False
     kb.stickyLevel = None
     kb.storeCrawlingChoice = None
@@ -1844,6 +1864,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.technique = None
     kb.tempDir = None
     kb.testMode = False
+    kb.testOnlyCustom = False
     kb.testQueryCount = 0
     kb.testType = None
     kb.threadContinue = True
@@ -2180,6 +2201,18 @@ def _setTorSocksProxySettings():
     socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5 if conf.torType == PROXY_TYPE.SOCKS5 else socks.PROXY_TYPE_SOCKS4, LOCALHOST, conf.torPort or DEFAULT_TOR_SOCKS_PORT)
     socks.wrapmodule(urllib2)
 
+def _checkWebSocket():
+    infoMsg = "checking for WebSocket"
+    logger.debug(infoMsg)
+
+    if conf.url and (conf.url.startswith("ws:/") or conf.url.startswith("wss:/")):
+        try:
+            from websocket import ABNF
+        except ImportError:
+            errMsg = "sqlmap requires third-party module 'websocket-client' "
+            errMsg += "in order to use WebSocket funcionality"
+            raise SqlmapMissingDependence(errMsg)
+
 def _checkTor():
     if not conf.checkTor:
         return
@@ -2449,6 +2482,7 @@ def init():
     _setWafFunctions()
     _setTrafficOutputFP()
     _resolveCrossReferences()
+    _checkWebSocket()
 
     parseTargetUrl()
     parseTargetDirect()
