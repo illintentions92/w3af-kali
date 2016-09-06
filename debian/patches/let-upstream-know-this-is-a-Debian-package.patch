@@ -34,7 +34,7 @@ Subject: Indicates that the version cames from a Debian Package
      return ('w3af - Web Application Attack and Audit Framework\n'
              'Version: %(version)s\n'
              'Revision: %(revision)s\n'
-+            'Distribution: Debian %(debian_ver)s\n'
++            'Distribution: Kali Linux %(debian_ver)s\n'
              'Branch: %(branch)s\n'
              'Local changes: %(dirty)s\n'
              'Author: Andres Riancho and the w3af team.') % version_dict
