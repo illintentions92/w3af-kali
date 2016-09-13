@@ -4,6 +4,8 @@ w3af (1.6.54+git20160429-3kali1) kali-dev; urgency=medium
   * Add a patch to be work with new version of mitmproxy: libmproxy replaced
     by mitmproxy (since version 0.17, not in debian yet)
   * Replace the depends on xdot by python-xdot: xdot is only for python3
+  * Add a minimal version on depends python-darts.lib.utils.lru to manage the
+    update from python-darts-lib-utils-lru to python-darts.lib.utils.lru
 
  -- Sophie Brun <sophie@freexian.com>  Tue, 06 Sep 2016 10:23:07 +0200
 
