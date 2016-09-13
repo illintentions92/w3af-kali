@@ -72,6 +72,7 @@ Depends: ${misc:Depends}, ${python:Depends},
          tcpdump,
          python-xdot
 Conflicts: python-json
+Breaks: kali-menu (<< 2016.3.1)
 Description: framework to find and exploit web application vulnerabilities (CLI only)
  w3af is a Web Application Attack and Audit Framework which aims
  to identify and exploit all web application vulnerabilities.
