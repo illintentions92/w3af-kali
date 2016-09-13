@@ -70,7 +70,7 @@ Depends: ${misc:Depends}, ${python:Depends},
          python-vulndb,
          python-yaml,
          tcpdump,
-         xdot
+         python-xdot
 Conflicts: python-json
 Description: framework to find and exploit web application vulnerabilities (CLI only)
  w3af is a Web Application Attack and Audit Framework which aims
