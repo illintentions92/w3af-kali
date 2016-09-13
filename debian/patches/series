@@ -3,3 +3,4 @@ this-script-won-t-ever-be-running-by-hand.patch
 disable-auto-update.patch
 disable-dependency_check.patch
 mitmproxy_ProxyServerError_ServerException.patch
+libmproxy-replaced-by-mitmproxy.patch

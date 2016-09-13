@@ -35,7 +35,7 @@ Description: framework to find and exploit web application vulnerabilities
 Package: w3af-console
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends},
-         mitmproxy,
+         mitmproxy (>= 0.17),
          python-chardet,
          python-cluster,
          python-concurrent.futures,

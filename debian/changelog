@@ -1,6 +1,8 @@
 w3af (1.6.54+git20160429-3kali1) kali-dev; urgency=medium
 
   * Import from debian
+  * Add a patch to be work with new version of mitmproxy: libmproxy replaced
+    by mitmproxy
 
  -- Sophie Brun <sophie@freexian.com>  Tue, 06 Sep 2016 10:23:07 +0200
 
