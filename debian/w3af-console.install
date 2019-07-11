@@ -1,5 +1,6 @@
 w3af/ usr/share/w3af/
 profiles/ usr/share/w3af/
 w3af_console usr/share/w3af/
-debian/helper-script/w3af usr/bin/
-debian/helper-script/w3af_console usr/bin/
+mitmproxy/ usr/share/w3af/
+netlib/ usr/share/w3af/
+pathod/ usr/share/w3af/

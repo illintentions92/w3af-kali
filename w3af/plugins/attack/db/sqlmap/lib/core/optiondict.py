@@ -73,6 +73,7 @@ optDict = {
             "Injection":     {
                                "testParameter":     "string",
                                "skip":              "string",
+                               "skipStatic":        "boolean",
                                "dbms":              "string",
                                "dbmsCred":          "string",
                                "os":                "string",
@@ -208,7 +209,6 @@ optDict = {
                              },
 
             "Miscellaneous": {
-                               "mnemonics":         "string",
                                "alert":             "string",
                                "answers":           "string",
                                "beep":              "boolean",
@@ -217,6 +217,7 @@ optDict = {
                                "disableColoring":   "boolean",
                                "googlePage":        "integer",
                                "mobile":            "boolean",
+                               "offline":           "boolean",
                                "pageRank":          "boolean",
                                "purgeOutput":       "boolean",
                                "smart":             "boolean",

@@ -1,7 +1,6 @@
-disable-os-package-check.patch
-01-kali-as-distribution.patch
+let-upstream-know-this-is-a-Debian-package.patch
+this-script-won-t-ever-be-running-by-hand.patch
 disable-auto-update.patch
-disable-pip-warning.patch
-jinja2-old.patch
-
-
+disable-dependency_check.patch
+mitmproxy_ProxyServerError_ServerException.patch
+libmproxy-replaced-by-mitmproxy.patch

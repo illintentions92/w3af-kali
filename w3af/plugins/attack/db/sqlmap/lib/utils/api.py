@@ -8,7 +8,6 @@ See the file 'doc/COPYING' for copying permission
 
 import logging
 import os
-import shutil
 import sqlite3
 import sys
 import tempfile
@@ -32,6 +31,7 @@ from lib.core.enums import PART_RUN_CONTENT_TYPES
 from lib.core.exception import SqlmapConnectionException
 from lib.core.log import LOGGER_HANDLER
 from lib.core.optiondict import optDict
+from lib.core.settings import IS_WIN
 from lib.core.subprocessng import Popen
 from thirdparty.bottle.bottle import error as return_error
 from thirdparty.bottle.bottle import get
@@ -155,7 +155,7 @@ class Task(object):
 
     def engine_start(self):
         self.process = Popen(["python", "sqlmap.py", "--pickled-options", base64pickle(self.options)],
-                             shell=False, stdin=PIPE, close_fds=False)
+                             shell=False, stdin=PIPE, close_fds=not IS_WIN)
 
     def engine_stop(self):
         if self.process:
